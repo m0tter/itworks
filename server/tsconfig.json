@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es5",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "robocomp": ["../common/robocomp"]
+    },
+    "removeComments": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "lib": [
+      "es2015"
+    ]
+  },
+  "exclude": [
+    ".git",
+    "node_modules",
+    ".tmp"
+  ]
+}
