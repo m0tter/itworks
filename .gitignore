@@ -1,5 +1,6 @@
 #password
 db.config.*
+_config.ts
 
 # compiled output
 /dist
