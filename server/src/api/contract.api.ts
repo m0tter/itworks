@@ -23,6 +23,10 @@ export class ContractAPI {
 
     // Contract
 
+    this.router.all('/*', utils.authCheck, (req, res, next) => {
+      next();
+    });
+
     this.router.get('/', (req, res) => {
       Contract.findAll({include: 
         [

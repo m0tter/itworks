@@ -13,7 +13,8 @@ export class AuthService {
     auth: {
       redirectUrl: AUTH_CALLBACK,
       responseType: 'token id_token',
-      audience: 'https://itworks.au.auth0.com/userinfo',
+      // audience: 'https://itworks.au.auth0.com/userinfo',
+      audience: 'http://itworks.gslc.local',
       params: { scope: 'openid' }
     },
     allowedConnections: ['GSLC']
