@@ -1,0 +1,35 @@
+@import "../../_palette.scss";
+
+.container { padding: 20px; }
+.action-button, .new-button {
+  color: white;
+  background-color: $_orange400;
+}
+.mat-button[disabled] { background-color:  $_orange200; }
+.action-buttons {
+  display: inline-block;
+  padding-left: 25px;
+}
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.list-container { margin-top: 20px; }
+.checkbox-fix { overflow: unset; }
+.users-grid {
+  display: table;
+  border: 1px solid $_lightgrey;
+}
+.mat-column-selected { max-width: 50px; }
+::ng-deep .full-width {
+  width: 100%;
+}
+::ng-deep .notes {
+  min-height: 150px;
+}
+::ng-deep .pad-right {
+  padding-right: 10px;
+}
+::ng-deep .date {
+  max-width: 120px;
+}

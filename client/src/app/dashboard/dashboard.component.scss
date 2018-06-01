@@ -1,0 +1,19 @@
+@import "../_palette.scss";
+
+.dashboard-container {
+  padding-top: 20px;
+}
+.stats {
+  display: flex;
+  padding-top: 20px;
+}
+.stats div { 
+  flex: 0 0 auto; 
+  padding-right: 20px;
+}
+:host /deep/ .top-row {
+  background-color: $_orange400;
+}
+:host /deep/ .middle-row {
+  background-color: $_blue400;
+}

@@ -1,0 +1,91 @@
+<mat-tab-group>
+  <mat-tab label="Details">
+    <div class="container">
+      <div class="details">
+        <form [formGroup]="form" (ngSubmit)="submitForm($event)">
+          <div>
+            <mat-form-field class="full-width">
+              <input matInput #barcode required formControlName="barcode" placeholder="Barcode" id="barcode">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-input-container class="full-width">
+              <input matInput required formControlName="serialNumber" placeholder="Serial Number" id="serialNumber">
+            </mat-input-container>
+          </div>
+          <div>
+            <mat-input-container class="full-width">
+              <input matInput required formControlName="name" placeholder="Name" id="name">
+            </mat-input-container>
+          </div>
+          <div>
+            <mat-input-container class="type pad-right">
+              <mat-select placeholder="Device Type" formControlName="modelId">
+                <mat-optgroup *ngFor="let t of types" [label]="t.type">
+                  <mat-option *ngFor="let m of t.models" [value]="m.id">{{m.model}}</mat-option>
+                </mat-optgroup>
+              </mat-select>
+            </mat-input-container>
+          
+          
+            <mat-form-field class="purchased pad-right">
+              <input matInput [matDatepicker]="purchasedPicker" formControlName="purchased" placeholder="Purchased">
+              <mat-datepicker-toggle matSuffix [for]="purchasedPicker"></mat-datepicker-toggle>
+              <mat-datepicker #purchasedPicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="disposed">
+              <input matInput [matDatepicker]="disposedPicker" formControlName="disposed" placeholder="Disposed">
+              <mat-datepicker-toggle matSuffix [for]="disposedPicker"></mat-datepicker-toggle>
+              <mat-datepicker #disposedPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="macaddress pad-right">
+              <input matInput formControlName="macLAN" placeholder="MAC LAN" id="macLAN">
+            </mat-form-field>
+            <mat-form-field class="macaddress">
+              <input matInput formControlName="macWIFI" placeholder="MAC WIFI" id="macWIFI">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-checkbox color="primary" placeholder="Spare" formControlName="spare">Device is spare</mat-checkbox>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Contracts">
+    <div class="container">
+      <div class="contracts">
+        <mat-table #table [dataSource]="device.contracts">
+          <ng-container matColumnDef="name" class="contract-name">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="start">
+              <mat-header-cell *matHeaderCellDef> Start </mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.start | date:'dd-MM-yyyy'}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="expiry">
+              <mat-header-cell *matHeaderCellDef> Expiry </mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.expiry | date:'dd-MM-yyyy'}}</mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="['name', 'start', 'expiry']"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['name', 'start', 'expiry']"></mat-row>
+        </mat-table>
+      </div>
+      <div class="add-button">
+        <button mat-fab color="primary" (click)="addContract()"><mat-icon aria-label="add contract">add</mat-icon></button>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="History">
+    <div class="container">
+      <p>history stuff here</p>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.dirty && !form.valid">Save</button>
+  <button mat-button (click)="_dialogRef.close()">Cancel</button>
+</div>

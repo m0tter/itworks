@@ -1,0 +1,26 @@
+<div mat-dialog-title>Return Loan - {{this._name}}</div>
+<div mat-dialog-content class="container">
+  <form [formGroup]="form" (ngSubmit)="submitForm($event)">
+    <div>
+      <mat-form-field>
+        <input readonly matInput formControlName="barcode" placeholder="Barcode" id="barcode">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="endPicker" formControlName="end" [(ngModel)]="_now">
+        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <textarea matInput formControlName="notes" placeholder="Notes" id="notes"></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.dirty && !form.valid">Save</button>
+  <button mat-button (click)="_dialogRef.close()">Cancel</button>
+</div>

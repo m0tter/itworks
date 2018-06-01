@@ -1,0 +1,6 @@
+.mat-form-field { width: 100%; }
+#name { min-width: 100px; }
+.suburb, .state { max-width: 80px; }
+::ng-deep .cdk-overlay-container {
+  z-index: 1050;
+}

@@ -1,0 +1,36 @@
+@import "../_palette";
+
+.icon {
+  width: 32px;
+  height: 32px;
+  padding-right: 15px;
+}
+
+.navbutton { 
+  padding:10px;
+}
+
+.navbar {
+  background-color: mat-color($mat-blue, 400, 1);
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 1.2em;
+  color: #f8f8f8;
+}
+.navbar a { 
+  color: #f8f8f8;
+  text-decoration: none;
+  padding: 10px;  
+}
+.nav-auth {
+  font-size: inherit;
+  color: inherit;
+  padding-top: 3px;
+  padding-bottom: 2px;
+}
+.routeactive {
+  background-color: mat-color($mat-blue, 800, .8);
+}

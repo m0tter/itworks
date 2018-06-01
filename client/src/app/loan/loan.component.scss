@@ -1,0 +1,28 @@
+@import "../_palette.scss";
+
+.container { padding: 20px; }
+.action-button, .new-button {
+  color: white;
+  background-color: $_orange400;
+}
+.mat-button[disabled] { background-color:  $_orange200; }
+.action-buttons {
+  display: inline-block;
+  padding-left: 25px;
+}
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.checkbox-fix { overflow: unset; }
+.mat-column-selected { max-width: 38px; }
+.mat-column-name { max-width: 200px; }
+.display-all { padding-left: 25px; }
+.returned { background: $_darkwhite; }
+.mat-checkbox { font-size: 14px; }
+.notcurrent { text-decoration: line-through; }
+.name-error {
+  color: red;
+  font-weight: bold;
+  text-decoration: underline;
+}

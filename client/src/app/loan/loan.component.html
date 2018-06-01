@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="button-container">
+    <button mat-raised-button class="new-button" type="button" (click)="newLoan()">New</button>
+    <div class="action-buttons">
+      <button mat-raised-button class="action-button" type="button" (click)="editLoan()" [disabled]="_editDisabled">Edit</button>
+      <button mat-raised-button class="action-button" type="button" (click)="returnLoan()" [disabled]="_returnDisabled">Return</button>
+      <mat-checkbox class="display-all" (value)="_displayAll" (click)="displayAll()">Include Returned</mat-checkbox>
+    </div>
+  </div>
+  <div class="list-container mat-elevation-z4">
+    <div class="list-header">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search...">
+      </mat-form-field>
+    </div>
+    <mat-table #table [dataSource]="_data" matSort>
+      <ng-container matColumnDef="selected" class="col-selected">
+        <mat-header-cell *matHeaderCellDef> &nbsp; </mat-header-cell>
+        <mat-cell class="checkbox-fix" *matCellDef="let row"><mat-checkbox class="row-selected" (checked)="row.selected" (click)="selectRow(row)"></mat-checkbox></mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="startdate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Start </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.startdate | date:'dd/MM/yyyy'}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="barcode">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Barcode </mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.device.barcode}}</mat-cell>
+        </ng-container>
+      <ng-container matColumnDef="serial">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Serial </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.device.serialNumber}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="deviceName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Device Name </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.device.name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+        <mat-cell *matCellDef="let row" [ngClass]="{'notcurrent': row.user && !row.user.current, 'name-error': !row.user}">{{(row.user) ? row.user.name : "ERROR - NOT FOUND"}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="enddate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.enddate | date:'dd/MM/yyyy'}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="['selected','startdate','barcode','serial', 'name', 'deviceName', 'enddate']"></mat-header-row>
+      <mat-row (dblclick)="editRow(row)" *matRowDef="let row; columns: ['selected','startdate','barcode','serial', 'name', 'deviceName', 'enddate']" [ngClass]="{'returned': row.enddate != null}"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[5,10,20,50]"></mat-paginator>
+  </div>
+</div>
+<div class="error">
+  <mat-chip-list class="error-chip"><mat-chip *ngIf="_error" selected="true" color="warn">{{_error}}</mat-chip></mat-chip-list>
+</div>

@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="button-container">
+    <button mat-raised-button class="new-button" type="button" (click)="newType()">New</button>
+    <div class="action-buttons">
+      <button mat-raised-button class="action-button" type="button" (click)="editType()" [disabled]="_editDisabled">Edit</button>
+      <button mat-raised-button class="action-button" type="button" (click)="deleteType()" [disabled]="_deleteDisabled">Delete</button>
+    </div>
+  </div>
+  <div class="list-container mat-elevation-z4">
+    <div class="list-header">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search...">
+      </mat-form-field>
+    </div>
+    <mat-table #table [dataSource]="_types">
+      <ng-container matColumnDef="selected" class="col-selected">
+        <mat-header-cell *matHeaderCellDef> &nbsp; </mat-header-cell>
+        <mat-cell class="checkbox-fix" *matCellDef="let row"><mat-checkbox class="row-selected" (checked)="row.selected" (click)="selectRow(row)"></mat-checkbox></mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef [ngClass]="type"> Type </mat-header-cell>
+        <mat-cell *matCellDef="let row" [ngClass]="type">{{row.type}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="desc">
+        <mat-header-cell *matHeaderCellDef [ngClass]="desc"> Description </mat-header-cell>
+        <mat-cell *matCellDef="let row" [ngClass]="desc">{{row.description}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="['selected','type','desc']"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['selected','type','desc']"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[5,10,20,50]"></mat-paginator>
+  </div>
+</div>
+<div class="error">
+  <mat-chip-list class="error-chip"><mat-chip *ngIf="_error" selected="true" color="warn">{{_error}}</mat-chip></mat-chip-list>
+</div>

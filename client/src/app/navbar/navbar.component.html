@@ -1,0 +1,10 @@
+<nav class="navbar">
+  <div class="navbutton"><a md-button routerLink="dashboard" routerLinkActive="routeactive">Dashboard</a></div>
+  <div class="navbutton"><a md-button routerLink="setup" routerLinkActive="routeactive">Setup</a></div>
+  <div class="navbutton"><a md-button routerLink="loan" routerLinkActive="routeactive">Loans</a></div>
+  <span class="fill-remaining-space"></span>
+  <div class="">
+    <button mat-button class="nav-auth" *ngIf="!_auth.isAuthenticated()" (click)="login()">Login</button>
+    <button mat-button class="nav-auth" *ngIf="_auth.isAuthenticated()" (click)="logout()">Logout</button>
+  </div>
+</nav>

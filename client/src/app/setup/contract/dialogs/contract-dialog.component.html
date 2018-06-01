@@ -1,0 +1,44 @@
+<div mat-dialog-title>Contract</div>
+<div mat-dialog-content class="content">
+  <form [formGroup]="form" (ngSubmit)="submitForm($event)" class="contract-form">
+    <div>
+      <mat-form-field class="full-width">
+        <input matInput required formControlName="name" placeholder="Name">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="full-width notes">
+        <textarea matInput class="notes" formControlName="notes" placeholder="Notes"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="pad-right">
+        <mat-select required placeholder="Vendor" formControlName="vendorId">
+          <mat-option *ngFor="let v of vendors" [value]="v.id">{{v.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-input-container>
+          <mat-select required placeholder="Contract Type" formControlName="typeId">
+            <mat-option *ngFor="let t of types" [value]="t.id">{{t.type}}</mat-option>
+          </mat-select>
+        </mat-input-container>
+      </div>
+    <div>
+      <mat-form-field class="pad-right date">
+        <input matInput [matDatepicker]="startPicker" formControlName="start" placeholder="Start">
+        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="pad-right date">
+          <input matInput [matDatepicker]="endPicker" formControlName="end" placeholder="End">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+      <mat-checkbox placeholder="No expiry" (click)="noExpiry($event)" formControlName="noExpiry">No expiry</mat-checkbox>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="okDialog()">Save</button>
+    <button mat-button color="default" (click)="closeDialog()">Cancel</button>
+</div>

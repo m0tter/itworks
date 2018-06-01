@@ -1,0 +1,60 @@
+@import "../../_palette.scss";
+
+.container { padding: 20px; }
+.action-button, .new-button {
+  color: white;
+  background-color: $_orange400;
+}
+.mat-button[disabled] { background-color:  $_orange200; }
+.action-buttons {
+  display: inline-block;
+  padding-left: 25px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.checkbox-fix { overflow: unset; }
+.mat-column-selected { max-width: 38px; }
+.mat-column-serial { flex: 0 0 200px; }
+::ng-deep .device-dialog {
+  .container {
+    min-height: 400px;
+    overflow-x: hidden;
+    .add-button {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      margin: 10px;
+    }
+  }
+  .mat-dialog-content { padding-top: 15px; }
+  .mat-row:hover { background-color: #f3f3f3; }
+  .details {
+    padding-top: 15px;
+    .full-width {
+      width: 100%;
+    }
+    .type, .purchased, .disposed {
+      width: 170px;
+    }
+    .pad-right {
+      padding-right: 10px;
+    }
+    .macaddress {
+      width: 200px;
+    }
+  }
+  .contracts {
+    padding-top: 10px;
+    margin: 0px;
+    .mat-header-row {
+      background-color: #efefef;
+      min-height: 26px;
+    }
+    .mat-row {
+      min-height: 26px;
+    }
+  }
+}

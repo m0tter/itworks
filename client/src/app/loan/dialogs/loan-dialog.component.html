@@ -1,0 +1,32 @@
+<div mat-dialog-title *ngIf="_new">New Loan</div> 
+<div mat-dialog-title *ngIf="!_new">Edit Loan</div>
+<div mat-dialog-content class="container">
+  <form [formGroup]="form" (ngSubmit)="submitForm($event)">
+    <div>
+      <mat-form-field>
+        <input required type="text" matInput placeholder="User" id="user" [formControl]="userCtrl" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let user of filteredUsers | async" [value]="user.name" (onSelectionChange)="selectedValue(user)">
+            {{user.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput required formControlName="barcode" placeholder="Barcode" id="barcode">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+          <input matInput [matDatepicker]="startPicker" formControlName="start" placeholder="Start Date">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.dirty && !form.valid">Save</button>
+  <button mat-button (click)="_dialogRef.close()">Cancel</button>
+</div>

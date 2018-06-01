@@ -1,0 +1,44 @@
+<div class="error" *ngIf="_error">
+  <mat-chip-list class="error-chip"><mat-chip selected="true" color="warn">{{_error}}</mat-chip></mat-chip-list>
+</div>
+<div class="container">
+  <div class="button-container">
+    <button mat-raised-button class="new-button" type="button" (click)="newType()">New</button>
+  </div>
+  <div class="item" *ngFor="let d of _types; index as di">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="panel-header">
+            <div class="panel-title">
+              {{d.type}}
+            </div>
+            <div class="panel-buttons">
+                <button mat-icon-button (click)="editType(d)"><mat-icon aria-label="edit model">create</mat-icon></button>
+                <button mat-icon-button (click)="deleteType(d)"><mat-icon aria-label="delete model">delete</mat-icon></button>
+            </div>
+          </div>
+          </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <div *ngFor="let m of d.models; index as mi" class="model">
+          <mat-form-field class="model-input">
+            <input matInput #name{{di}}{{mi}} [readonly]="!m.edit" [(ngModel)]="m.model" placeholder="Name">
+          </mat-form-field>
+          <span class="flex-fill"></span>
+          <span class="model-buttons">
+            <button mat-icon-button (click)="editModel(m)" *ngIf="!m.edit"><mat-icon aria-label="edit model">create</mat-icon></button>
+            <button mat-icon-button (click)="cancelModelEdit(m, d)" *ngIf="m.edit"><mat-icon aria-label="cancel edit model">clear</mat-icon></button>
+            <button mat-icon-button (click)="saveModel(m, d)" *ngIf="m.edit"><mat-icon aria-label="save model">save</mat-icon></button>
+            <button mat-icon-button (click)="deleteModel(m, d)"><mat-icon aria-label="delete model">delete</mat-icon></button>
+          </span>
+        </div>
+        <div class="add-model">
+          <button mat-raised-button color="primary" (click)="addModel(d)" *ngIf="!_adding">Add model</button>
+        </div>
+      </ng-template>
+    </mat-expansion-panel>
+  </div>
+</div>
+
+  

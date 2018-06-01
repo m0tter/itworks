@@ -1,0 +1,39 @@
+<div mat-dialog-title>Edit Loan - {{this.loan.user.name}}</div>
+<div mat-dialog-content class="container">
+  <form [formGroup]="form" (ngSubmit)="submitForm($event)">
+    <div>
+      <mat-form-field>
+        <input matInput formControlName="barcode" placeholder="Barcode" id="barcode">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+          <input matInput [matDatepicker]="startPicker" formControlName="start" placeholder="Start Date">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="endPicker" formControlName="end" placeholder="End Date">
+        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <textarea matInput formControlName="notes" placeholder="Notes" id="notes"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-checkbox formControlName="lost" (value)="row.lost">Device Lost</mat-checkbox>
+    </div>
+    <div class="delete">
+      <button mat-raised-button color="warn" (click)="delete()">Delete</button>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.dirty && !form.valid">Save</button>
+  <button mat-button (click)="_dialogRef.close()">Cancel</button>
+</div>

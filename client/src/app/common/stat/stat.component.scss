@@ -1,0 +1,42 @@
+.card { 
+  width: 250px;
+}
+.container { 
+  display: flex;
+  color: #fff;
+  flex-direction: column;
+  padding: 2px;
+}
+.row-top, .row-bottom { 
+  flex: 1;
+  display: flex;
+}
+.row-top { padding: 10px; }
+.icon {
+  flex: 1;
+}
+.count {
+  font-weight: bold;
+  font-size: 56px;
+}
+.content {
+  flex: 2;
+  text-align: right;
+}
+.action {
+  flex: 1;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+}
+a, a:hover, a:visited {
+  text-decoration: none;
+  color: #707070;
+}
+a {
+  font-family: inherit;
+}
+.pull-right { float: right; }
+.border { border-radius: 3px; }
