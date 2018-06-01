@@ -4,18 +4,45 @@ import { Device, IDeviceModel, DeviceType, IDeviceTypeModel, DeviceModel, IDevic
 import * as bpsr from 'body-parser';
 import * as utils from '../utils';
 import { Op } from 'sequelize';
+import { DeviceContract } from '../models/device-contract.model';
+import { Contract } from '../models/contract.model';
 
 export class DeviceAPI { 
   public router = Router();
 
   constructor() { this.buildRouter(); }
 
+  getDevice(id: number, cb: (result: IDeviceModel) => void) {
+    Device.findById(id, {include: [
+      {
+        model: DeviceModel, as: 'model'
+      },
+      {
+        model: Contract, as: 'contracts'
+      }
+    ]})
+      .then(result => cb(result))
+      .catch(err => { throw new Error(err.message); });
+  }
+
   buildRouter(): any {
     this.router.get('/', (req, res) => {
-      Device.findAll({include: [{model: DeviceModel, as: 'model'}]})
+      Device.findAll({include: [
+        {
+          model: DeviceModel, as: 'model'
+        },
+        {
+          model: Contract, as: 'contracts'
+        }
+      ]})
         .then(result => res.status(200).json({'success': true, 'data': result}))
-        .catch(err => res.status(200).json({'success': false, 'data': err}));
+        .catch(err => {
+          console.error('Error gettings devices. ' + err.message);
+          res.status(200).json({'success': false, 'data': err.message});
+        });
     });
+
+    
 
     // Device Paths
 
@@ -31,8 +58,30 @@ export class DeviceAPI {
           macWired: d.macWired,
           macWireless: d.macWireless,
           modelId: d.modelId
-        }).then(result => {
-          res.status(200).json({'success': true, 'data': result});
+        }).then(deviceResult => {
+          if(d.contracts && d.contracts.length > 0) {
+            let count = 0;
+            d.contracts.forEach(e => {
+              DeviceContract.create({
+                contractId: e.id,
+                deviceId: deviceResult.id
+              })
+              .then(contractResult => {
+                if((++count) === d.contracts.length) {
+                  this.getDevice(deviceResult.id, (device => { 
+                    res.status(200).json({'success': true, 'data': device}); 
+                  }));
+                }
+              })
+              .catch(contractErr => {
+                throw new Error(contractErr.message);
+              })
+            });
+          } else {
+            this.getDevice(deviceResult.id, (device => { 
+              res.status(200).json({'success': true, 'data': device}); 
+            }));
+          }
         }).catch(err => {
           res.status(200).json({'success': false, 'data': err});
         });
@@ -60,7 +109,26 @@ export class DeviceAPI {
               { 
                 where: { id: req.params.id }
               })
-            .then(result => res.status(200).json({'success': true, 'data': result}))
+            .then(result => {
+              if(d.contracts) {
+                DeviceContract.destroy({where: {deviceId: d.id}})
+                  .then(delResult => {
+                    let count = 0;
+                    d.contracts.forEach(e => {
+                      DeviceContract.create({
+                        contractId: e.id,
+                        deviceId: d.id
+                      })
+                      .then(contractResult => {
+                        if((++count) === d.contracts.length) { res.status(200).json({'success': true, 'data': result}); }
+                      })
+                    });
+                  })
+                  .catch(err => res.status(200).json({'success': false, 'data': 'Error deleting associated contracts. ' + err.message}));
+                } else {
+                  res.status(200).json({'success': true, 'data': result});
+                }
+            })
             .catch(err => res.status(200).json({'success': false, 'data': err})
           );
         }
@@ -121,7 +189,6 @@ export class DeviceAPI {
     this.router.patch('/model', bpsr.json(), (req, res) => {
       try {
         const t = <IDeviceModel_Model>req.body;
-        console.log('device.api:t=' + JSON.stringify(t));
 
         DeviceModel.update({
           model: t.model,
@@ -212,11 +279,17 @@ export class DeviceAPI {
       }
     });
 
-    this.router.get('/setup-db', (req, res) => {
+    this.router.get('/setup-db/device', (req, res) => {
       DeviceType.sync({force: true}).then(() => {
         DeviceModel.sync({force: true}).then(() => {
           Device.sync({force: true}).then(() => { res.status(200).json({'message': 'device tables created'}); }); 
-        })})});
+    })})});
+
+    this.router.get('/setup-db/devicecontract', (req, res) => {
+      DeviceContract.sync({force: true}).then(() => {
+        res.status(200).json({'message': 'device-contract table created'});
+      })
+    });
   }
 
   errorHandler(error:any, response:Response, msg?:string){

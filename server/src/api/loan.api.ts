@@ -26,6 +26,60 @@ export class LoanAPI {
       }
     });
 
+    this.router.post('/', bpsr.json(), (req, res) => {
+      try {
+        const l = <ILoanModel>req.body;
+        if (!l || !l.userId || !l.deviceBarcode) {
+          res.status(200).json({'success': false, 'data': 'Can not create loan, missing userid or device barcode'});
+        } else {
+          Loan.create({
+            startdate: l.startdate,
+            deviceBarcode: l.deviceBarcode,
+            userId: l.userId
+          }).then(result => {
+            console.log('result.id=' + result.id);
+            Loan.findById(result.id, {include: [Device, TassStudent, TassStaff]})
+              .then(newLoan => res.status(200).json({'success': true, 'data': newLoan}))
+              .catch(err => res.status(200).json({'success': false, 'data': err}));
+          }).catch(err => {
+            res.status(200).json({'success': false, 'data': err});
+          });
+        }
+      } catch(e) {
+        this.errorHandler(e, res, 'An error occurred creating the loan');
+      }
+    });
+
+    this.router.patch('/:id', bpsr.json(), (req, res) => {
+      try {
+        if (req.params.id) {
+          const l = <ILoanModel>req.body;
+          if (!l || !l.userId || !l.deviceBarcode) {
+            res.status(200).json({'success': false, 'data': 'Can not update loan, missing userid or device barcode'});
+          } else {
+            Loan
+              .update(
+                {
+                  userId: l.userId,
+                  deviceBarcode: l.deviceBarcode,
+                  startdate: l.startdate,
+                  enddate: l.enddate,
+                  notes: l.notes,
+                  lost: l.lost
+                },
+                {
+                  where: { id: req.params.id }
+                })
+              .then(result => res.status(200).json({'success': true, 'data': result}))
+              .catch(err => res.status(200).json({'success': false, 'data': err})
+            );
+          }
+        }
+      } catch(e) {
+        this.errorHandler(e, res, 'An error occurred updating the loan in the database');
+      }
+    });
+
     // current loans
     this.router.get('/current', (req, res) => {
       try { 
@@ -71,7 +125,7 @@ export class LoanAPI {
                 res.status(200).json({'success': true, 'data': true});
               }
             } else {
-              Device.findByPrimary(req.params.id)
+              Device.findOne({where: { barcode: req.params.id }})
                 .then(dev => {
                   if(dev) {
                     res.status(200).json({'success': true, 'data': true});
@@ -87,51 +141,6 @@ export class LoanAPI {
           });
       } catch(e) {
         this.errorHandler(e, res, 'An error occurred checking availability')
-      }
-    });
-
-    this.router.post('/', bpsr.json(), (req, res) => {
-      try {
-        const l = <ILoanModel>req.body;
-        Loan.create({
-          startdate: l.startdate,
-          deviceBarcode: l.deviceBarcode,
-          userId: l.userId
-        }).then(result => {
-          Loan.findById(result.id, {include: [Device, TassStudent, TassStaff]})
-            .then(newLoan => res.status(200).json({'success': true, 'data': newLoan}))
-            .catch(err => res.status(200).json({'success': false, 'data': err}));
-        }).catch(err => {
-          res.status(200).json({'success': false, 'data': err});
-        });
-      } catch(e) {
-        this.errorHandler(e, res, 'An error occurred creating the loan');
-      }
-    });
-
-    this.router.patch('/:id', bpsr.json(), (req, res) => {
-      try {
-        if (req.params.id) {
-          const l = <ILoanModel>req.body;
-          Loan
-            .update(
-              {
-                userId: l.userId,
-                deviceBarcode: l.deviceBarcode,
-                startdate: l.startdate,
-                enddate: l.enddate,
-                notes: l.notes,
-                lost: l.lost
-              },
-              {
-                where: { id: req.params.id }
-              })
-            .then(result => res.status(200).json({'success': true, 'data': result}))
-            .catch(err => res.status(200).json({'success': false, 'data': err})
-          );
-        }
-      } catch(e) {
-        this.errorHandler(e, res, 'An error occurred updating the loan in the database');
       }
     });
 

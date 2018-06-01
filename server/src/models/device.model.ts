@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { sequelize } from '../utils/database.utils';
+import { Contract, IContract_Model } from './contract.model';
 
 // Device
 
@@ -19,12 +20,13 @@ export interface IDeviceModel extends Sequelize.Model<IDeviceModel, IDeviceAddMo
   updatedAt: Date;
   spare: boolean;
   modelId: number;
+  contracts: IContract_Model[];
 }
 
 export const Device = sequelize.define<IDeviceModel, IDeviceAddModel>('device', 
 {
-  id: { type: Sequelize.INTEGER, allowNull: false, autoIncrement: true },
-  barcode: { type: Sequelize.STRING, allowNull: false, primaryKey: true },
+  id: { type: Sequelize.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
+  barcode: { type: Sequelize.STRING, allowNull: false, unique: true },
   purchaseDate: { type: Sequelize.DATE },
   macWired: { type: Sequelize.STRING },
   macWireless: { type: Sequelize.STRING },
@@ -73,7 +75,6 @@ export const DeviceModel = sequelize.define<IDeviceModel_Model, IDeviceModel_Add
 })
 
 // Relationships
-// DeviceModel.belongsToMany(DeviceType, { through: DeviceType, as: 'type', foreignKey: 'id' });
 DeviceType.hasMany(DeviceModel, { foreignKey: 'deviceTypeId', as: 'models' });
 Device.belongsTo(DeviceModel, { foreignKey: 'modelId', as: 'model' });
-//Device.hasOne(DeviceModel, { foreignKey: 'id', as: 'model',  });
+Device.belongsToMany(Contract, { as: 'contracts', through: 'deviceContracts', foreignKey: 'deviceId'});

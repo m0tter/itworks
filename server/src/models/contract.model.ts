@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { sequelize } from '../utils/database.utils';
 import { Vendor } from './vendor.model';
+import { Device } from './device.model';
 
 // Contract
 
@@ -34,14 +35,17 @@ export interface IContractType_ViewModel { }
 export interface IContractType_Model extends Sequelize.Model<IContractType_Model, IContractType_AddModel> {
   id: number;
   type: string;
+  description: string;
 }
 
 export const ContractType = sequelize.define<IContractType_Model, IContractType_AddModel>('contractType',
 {
   id: { type: Sequelize.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
-  type: { type: Sequelize.STRING, allowNull: false }
+  type: { type: Sequelize.STRING, allowNull: false },
+  description: { type: Sequelize.STRING }
 });
 
 
 Contract.belongsTo(ContractType, { foreignKey: 'typeId', as: 'type' });
 Contract.belongsTo(Vendor, { foreignKey: 'vendorId', as: 'vendor' });
+// Contract.belongsToMany(Device, { as: 'devices', through: 'deviceContract', foreignKey: 'contractId' });

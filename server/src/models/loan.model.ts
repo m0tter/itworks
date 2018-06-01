@@ -21,7 +21,6 @@ export interface ILoanModel extends Sequelize.Model<ILoanModel, ILoanAddModel> {
   lost: boolean;
   userId: string;
   deviceBarcode: string;
-  // studentStudCode: string;
 }
 
 export const Loan = sequelize.define<ILoanModel, ILoanAddModel>('loan', {
@@ -32,7 +31,7 @@ export const Loan = sequelize.define<ILoanModel, ILoanAddModel>('loan', {
   userId: { type: Sequelize.STRING }
 });
 
-Loan.belongsTo(Device);
+Loan.belongsTo(Device, { foreignKey: 'deviceBarcode', targetKey: 'barcode' });
 Loan.belongsTo(TassStudent, { constraints: false, foreignKey: 'userId' });
 Loan.belongsTo(TassStaff, { constraints: false, foreignKey: 'userId' });
 
